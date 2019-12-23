@@ -6,26 +6,24 @@ __lua__
 
 function _init()
 	g={
-		stars=create_stars(100),
+		stars=create_stars(200),
 		star_speed=-1,
 		plane_size=128
 	}
 end
 
 function _update60()
- for s in all(g.stars) do
-		if (s.z<=1) then
-			s.z=g.plane_size
-		else
-			s.z+=g.star_speed
-		end
- end
+	update_stars()
 end
 
 function _draw()
 	cls()
 	draw_stars()
 end
+
+
+-->8
+--stars
 
 function create_stars(count)
 	stars={}
@@ -43,12 +41,34 @@ end
 function draw_stars()
 	for s in all(g.stars) do
 		z_ratio=20/s.z
-		x_screen=s.x*z_ratio+64		
+		x_screen=s.x*z_ratio+64	
 		y_screen=s.y*z_ratio+64
-		pset(x_screen,y_screen,7)
+		
+
+		pset(
+			x_screen,
+			y_screen,
+			star_color(s.z))
 	end
 end
 
+function star_color(z)
+	if (z>=90) then 
+	if	(z>=75) then return 1 end
+	if (z>=50) then return 6 end
+	if (z>=15) then return 7 end
+	return 15
+end
+
+function update_stars()
+ for s in all(g.stars) do
+		if (s.z<=1) then
+			s.z=g.plane_size
+		else
+			s.z+=g.star_speed
+		end
+ end
+end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
