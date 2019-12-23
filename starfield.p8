@@ -5,43 +5,46 @@ __lua__
 --brxck's first pico-8
 
 function _init()
-	global={
-		stars=create_stars(),
+	g={
+		stars=create_stars(100),
+		star_speed=-1,
+		plane_size=128
 	}
 end
 
 function _update60()
- for s in all(global.stars) do
+ for s in all(g.stars) do
 		if (s.z<=1) then
-			s.z=rnd(128)
+			s.z=g.plane_size
 		else
-			s.z-=1
+			s.z+=g.star_speed
 		end
  end
 end
 
 function _draw()
+	cls()
 	draw_stars()
 end
 
-function create_stars()
+function create_stars(count)
 	stars={}
-	for i=0,100 do
-		star={}
-		star.x=rnd(128)-64
-		star.y=rnd(128)-64
-		star.z=rnd(128)
+	for i=0,count do
+		star={
+			x=rnd(128)-64,
+			y=rnd(128)-64,
+			z=rnd(128)
+		}
 		add(stars,star)
 	end
 	return stars
 end
 
 function draw_stars()
-	rectfill(0,0,127,127,0)
-	for s in all(global.stars) do
+	for s in all(g.stars) do
 		z_ratio=20/s.z
-		y_screen=s.y*z_ratio+64
 		x_screen=s.x*z_ratio+64		
+		y_screen=s.y*z_ratio+64
 		pset(x_screen,y_screen,7)
 	end
 end
