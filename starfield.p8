@@ -14,6 +14,7 @@ function _init()
 end
 
 function _menu_update60()
+	input()
 	update_stars()
 end
 
@@ -33,6 +34,14 @@ end
 function print_msg()
 	print(g.msg,14,59,1)
 	print(g.msg,15,60,7)
+end
+
+function input()
+	if (btn(4)) then
+		g.speed=min(g.speed+0.01,-0.5)
+	elseif (btn(5)) then
+		g.speed=max(g.speed-0.01,-5)
+	end
 end
 -->8
 --stars
@@ -56,7 +65,7 @@ end
 function draw_stars()
 	for s in all(g.stars) do
 		z1_ratio=20/s.z
-		z2_ratio=20/(s.z-2)
+		z2_ratio=20/(s.z-g.speed)
 		x1=s.x*z1_ratio+64	
 		y1=s.y*z1_ratio+64
 		x2=s.x*z2_ratio+64
