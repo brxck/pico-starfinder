@@ -7,7 +7,7 @@ __lua__
 function _init()
 	g={
 		stars=create_stars(200),
-		star_speed=-1,
+		speed=-1,
 		plane_size=128
 	}
 	_menu_init()
@@ -40,14 +40,17 @@ end
 function create_stars(count)
 	stars={}
 	for i=0,count do
-		star={
-			x=rnd(128)-64,
-			y=rnd(128)-64,
-			z=rnd(128)+15
-		}
+		star={}
+		init_star(star)
 		add(stars,star)
 	end
 	return stars
+end
+
+function init_star(star)
+	star.x=rnd(128)-64
+	star.y=rnd(128)-64
+	star.z=rnd(128)+15
 end
 
 function draw_stars()
@@ -62,9 +65,10 @@ function draw_stars()
 		line(x1,y1,x2,y2,star_color(s.z))
 	end
 end
+
 function star_color(z)
 	if (z>=90) then return 0 end 
-	if	(z>=75) then return 1 end
+	if (z>=75) then return 1 end
 	if (z>=50) then return 6 end
 	if (z>=15) then return 7 end
 	return 15
@@ -73,9 +77,9 @@ end
 function update_stars()
  for s in all(g.stars) do
 		if (s.z<=10) then
-			s.z=g.plane_size
+			init_star(s)
 		else
-			s.z+=g.star_speed
+			s.z+=g.speed
 		end
  end
 end
