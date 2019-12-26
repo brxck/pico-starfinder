@@ -5,55 +5,48 @@ __lua__
 --brxck's first pico-8
 
 function _init()
-	g={
-		stars=create_stars(200),
-		ship={
-			x=60,
-			y=60,
-			z=25,
-			length=2, 
-			width=5, 
-			height=3
-		},
-		speed=-1,
-		plane_size=128
+	plane_size=128
+	msg="the stars my destination"
+	score=0
+	speed=-1
+	stars=create_stars(200)
+	ship={
+		x=60,
+		y=60,
+		z=25,
+		length=2, 
+		width=5, 
+		height=3,
 	}
-	_menu_init()
+	music(0)
 end
 
-function _menu_update60()
+function _update60()
 	input()
 	update_stars()
 end
 
-function _menu_draw()
+function _draw()
 	cls()
 	draw_stars()
 	draw_ship()
 	print_msg()
 end
 
-function _menu_init()
-	g.msg="the stars my destination"
-	_draw=_menu_draw
-	_update60=_menu_update60
-	music(0)
-end
-
-function print_msg()
-	print(g.msg,14,59,1)
-	print(g.msg,15,60,7)
+function print_msg(txt,color)
+	print(msg,14,60,13)
+	print(msg,14,59,7)
 end
 
 function input()
-	if (btn(0)) then g.ship.x-=1 end
-	if (btn(1)) then g.ship.x+=1 end
-	if (btn(2)) then g.ship.y-=1 end
-	if (btn(3)) then g.ship.y+=1 end
+	if (btn(0)) then ship.x-=1 end
+	if (btn(1)) then ship.x+=1 end
+	if (btn(2)) then ship.y-=1 end
+	if (btn(3)) then ship.y+=1 end
 	if (btn(4)) then
-		g.speed=min(g.speed+0.01,-0.5)
+		speed=min(speed+0.01,-0.5)
 	elseif (btn(5)) then
-		g.speed=max(g.speed-0.01,-5)
+		speed=max(speed-0.01,-5)
 	end
 end
 -->8
@@ -76,9 +69,9 @@ function init_star(star)
 end
 
 function draw_stars()
-	for s in all(g.stars) do
+	for s in all(stars) do
 		z1_ratio=20/s.z
-		z2_ratio=20/(s.z-g.speed)
+		z2_ratio=20/(s.z-speed)
 		x1=s.x*z1_ratio+64	
 		y1=s.y*z1_ratio+64
 		x2=s.x*z2_ratio+64
@@ -97,24 +90,24 @@ function star_color(z)
 end
 
 function draw_ship()
-	for i=0,g.ship.length do
-		z_ratio=20/(g.ship.z-i)
-		x=g.ship.x*z_ratio+64
-		y=g.ship.y*z_ratio+64
+	for i=0,ship.length do
+		z_ratio=20/(ship.z-i)
+		x=ship.x*z_ratio+64
+		y=ship.y*z_ratio+64
 		rectfill(
 			x,y,
-			x+g.ship.width,
-			y+g.ship.height,
+			x+ship.width,
+			y+ship.height,
 			5)
 	end
 end
 
 function update_stars()
- for s in all(g.stars) do
+ for s in all(stars) do
 		if (s.z<=10) then
 			init_star(s)
 		else
-			s.z+=g.speed
+			s.z+=speed
 		end
  end
 end
