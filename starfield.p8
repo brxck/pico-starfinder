@@ -136,7 +136,7 @@ function star_color(z)
 end
 
 function draw_ship()
-	for i=0,ship.length do
+	for i=0,ship.length,0.5 do
 		z_ratio=20/(ship.z-i)
 		x=ship.x*z_ratio+64
 		y=ship.y*z_ratio+64
