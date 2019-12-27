@@ -42,15 +42,18 @@ function print_msg(txt,color)
 end
 
 function input()
+	-- ship movement
 	if (btn(0)) then ship.x-=1 end
 	if (btn(1)) then ship.x+=1 end
 	if (btn(2)) then ship.y-=1 end
 	if (btn(3)) then ship.y+=1 end
+
 	if (btn(4)) then
-		speed=-5
+		speed=max(speed-0.01,-5) -- boost!
 	else
-		speed=-1
+		speed=min(speed+0.05,-1)
 	end
+
 	if (btnp(5)) then
 		fire()
 	end
