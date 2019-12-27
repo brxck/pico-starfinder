@@ -11,6 +11,7 @@ function _init()
 	speed=-1
 	lasers={}
 	stars=create_stars(200)
+	tick=0
 	ship={
 		x=0,
 		y=60,
@@ -19,13 +20,14 @@ function _init()
 		dy=0,
 		dz=0,
 		length=2, 
-		width=5, 
+		width=8, 
 		height=3,
 	}
 	music(0)
 end
 
 function _update60()
+	tick+=1
 	update_stars()
 	update_lasers()
 	move_ship()
@@ -140,13 +142,33 @@ function draw_ship()
 		z_ratio=20/(ship.z-i)
 		x=ship.x*z_ratio+64
 		y=ship.y*z_ratio+64
+		width=3+ship.width*(i/ship.length)
+		offset=5-width
+		-- shadow
 		rectfill(
-			x,y,
-			x+ship.width,
-			y+ship.height,
+			x+offset,y,
+			x+width,y+ship.height,
+			1
+		)
+		-- body
+		rectfill(
+			x+offset,y,
+			x+width,y+ship.height-2,
 			5
 		)
 	end
+	-- back
+	rectfill(
+		x+offset,y,
+		x+width,y+ship.height,
+		5
+	)
+	-- engine
+	rectfill(
+		x+offset+2,y+1,
+		x+width-2,y+ship.height-1,
+		12
+	)
 end
 
 function draw_lasers()
