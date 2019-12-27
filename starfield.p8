@@ -15,6 +15,9 @@ function _init()
 		x=0,
 		y=60,
 		z=25,
+		dx=0,
+		dy=0,
+		dz=0,
 		length=2, 
 		width=5, 
 		height=3,
@@ -23,9 +26,13 @@ function _init()
 end
 
 function _update60()
-	input()
 	update_stars()
 	update_lasers()
+	move_ship()
+	boost()
+	if (btnp(5)) then
+		fire()
+	end
 end
 
 function _draw()
@@ -41,21 +48,42 @@ function print_msg(txt,color)
 	print(msg,14,59,7)
 end
 
-function input()
-	-- ship movement
-	if (btn(0)) then ship.x-=1 end
-	if (btn(1)) then ship.x+=1 end
-	if (btn(2)) then ship.y-=1 end
-	if (btn(3)) then ship.y+=1 end
+function move_ship()
+	-- thrust
+	if (btn(0)) then
+		ship.dx=max(ship.dx-0.01,-3)
+	elseif (btn(1)) then
+		ship.dx=min(ship.dx+0.01,3)
+	end
 
+	if (btn(2)) then
+		ship.dy=max(ship.dy-0.01,-3)
+	elseif (btn(3)) then
+		ship.dy=min(ship.dy+0.01,3)
+	end
+
+	-- revert to zero
+	if (not btn(0) and ship.dx<0) then
+		ship.dx+=0.01
+	elseif (not btn(1) and ship.dx>0) then 
+		ship.dx-=0.01
+	end
+
+	if (not btn(2) and ship.dy<0) then
+		ship.dy+=0.01
+	elseif (not btn(3) and ship.dy>0) then 
+		ship.dy-=0.01
+	end
+
+	ship.x+=ship.dx
+	ship.y+=ship.dy
+end
+
+function boost()
 	if (btn(4)) then
 		speed=max(speed-0.01,-5) -- boost!
 	else
 		speed=min(speed+0.05,-1)
-	end
-
-	if (btnp(5)) then
-		fire()
 	end
 end
 -->8
