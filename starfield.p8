@@ -9,9 +9,10 @@ function _init()
 	msg="the stars my destination"
 	score=0
 	speed=-1
+	lasers={}
 	stars=create_stars(200)
 	ship={
-		x=60,
+		x=0,
 		y=60,
 		z=25,
 		length=2, 
@@ -24,11 +25,13 @@ end
 function _update60()
 	input()
 	update_stars()
+	update_lasers()
 end
 
 function _draw()
 	cls()
 	draw_stars()
+	draw_lasers()
 	draw_ship()
 	print_msg()
 end
@@ -44,9 +47,12 @@ function input()
 	if (btn(2)) then ship.y-=1 end
 	if (btn(3)) then ship.y+=1 end
 	if (btn(4)) then
-		speed=min(speed+0.01,-0.5)
-	elseif (btn(5)) then
-		speed=max(speed-0.01,-5)
+		speed=-5
+	else
+		speed=-1
+	end
+	if (btnp(5)) then
+		fire()
 	end
 end
 -->8
@@ -70,15 +76,24 @@ end
 
 function draw_stars()
 	for s in all(stars) do
-		z1_ratio=20/s.z
-		z2_ratio=20/(s.z-speed)
-		x1=s.x*z1_ratio+64	
-		y1=s.y*z1_ratio+64
-		x2=s.x*z2_ratio+64
-		y2=s.y*z2_ratio+64
-		
-		line(x1,y1,x2,y2,star_color(s.z))
+		line3d(
+			{s.x,s.y,s.z},
+			{s.x,s.y,s.z-speed},
+			star_color(s.z)
+		)
 	end
+end
+
+function line3d(point1,point2,col)
+	-- side effect of this transformation:
+	-- 0,0 is now center screen
+	z1_ratio=20/point1[3]
+	z2_ratio=20/point2[3]
+	x1=point1[1]*z1_ratio+64	
+	y1=point1[2]*z1_ratio+64
+	x2=point2[1]*z2_ratio+64
+	y2=point2[2]*z2_ratio+64
+	line(x1,y1,x2,y2,col)
 end
 
 function star_color(z)
@@ -98,8 +113,28 @@ function draw_ship()
 			x,y,
 			x+ship.width,
 			y+ship.height,
-			5)
+			5
+		)
 	end
+end
+
+function draw_lasers()
+	for l in all(lasers) do
+		line3d(
+			{l.x,l.y,l.z-3},
+			{l.x,l.y,l.z},
+			l.z>100 and 3 or 11 --ternary in lua!
+		)
+	end
+end
+
+function fire()
+	laser={
+		x=ship.x+ship.width/2,
+		y=ship.y+ship.height/2,
+		z=ship.z
+	}
+	add(lasers, laser)
 end
 
 function update_stars()
@@ -110,6 +145,16 @@ function update_stars()
 			s.z+=speed
 		end
  end
+end
+
+function update_lasers()
+	for l in all(lasers) do
+		if (l.z>300) then
+			del(lasers,l)
+		else
+			l.z+=3
+		end
+	end
 end
 -->8
 --game
