@@ -77,8 +77,8 @@ function move_ship()
 		ship.dy-=0.01
 	end
 
-	ship.x=mid(ship.x+ship.dx,-75,75)
-	ship.y=mid(ship.y+ship.dy,-75,75)
+	ship.x=mid(ship.x+ship.dx,-60,60-ship.width)
+	ship.y=mid(ship.y+ship.dy,-60,60)
 end
 
 function boost()
