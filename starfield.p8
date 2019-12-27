@@ -13,21 +13,21 @@ function _init()
 	stars=create_stars(200)
 	tick=0
 	ship={
-		x=0,
-		y=60,
+		x=-10,
+		y=50,
 		z=25,
 		dx=0,
 		dy=0,
 		dz=0,
-		length=2, 
-		width=8, 
+		length=5, 
+		width=20, 
 		height=3,
 	}
 	music(0)
 end
 
 function _update60()
-	tick+=1
+	tick=(tick+1)%32767 -- wrap before max, always positive
 	update_stars()
 	update_lasers()
 	move_ship()
@@ -142,33 +142,24 @@ function draw_ship()
 		z_ratio=20/(ship.z-i)
 		x=ship.x*z_ratio+64
 		y=ship.y*z_ratio+64
-		width=3+ship.width*(i/ship.length)
-		offset=5-width
-		-- shadow
-		rectfill(
-			x+offset,y,
-			x+width,y+ship.height,
-			1
-		)
-		-- body
-		rectfill(
-			x+offset,y,
-			x+width,y+ship.height-2,
-			5
-		)
+		
+		width=ship.width*(i/ship.length)
+		offset=(ship.width-width)/2
+		x0=x+offset
+		y0=y
+		x1=x+offset+width
+		y1=y+ship.height
+
+		rectfill(x0,y0,x1,y1,1) -- shadow
+		rectfill(x0,y0,x1,y1-2,5) -- body
 	end
-	-- back
-	rectfill(
-		x+offset,y,
-		x+width,y+ship.height,
-		5
-	)
+	rectfill(x0,y0,x1,y1,5) --back
 	-- engine
-	rectfill(
-		x+offset+2,y+1,
-		x+width-2,y+ship.height-1,
-		12
-	)
+	rectfill(x0+2,y0+1,x1-2,y1-1,1) 
+	pset(x0+11-(0.05*abs(speed)*tick%9),y0+1,12)
+	pset(x0+11-(0.05*abs(speed)*tick%9),y0+2,12)
+	pset(x0+11+(0.05*abs(speed)*tick%9),y0+1,12)
+	pset(x0+11+(0.05*abs(speed)*tick%9),y0+2,12)
 end
 
 function draw_lasers()
