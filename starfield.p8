@@ -6,7 +6,7 @@ __lua__
 
 function _init()
 	plane_size=128
-	msg="the stars my destination"
+	msg=""
 	score=0
 	speed=-1
 	lasers={}
@@ -156,10 +156,11 @@ function draw_ship()
 	rectfill(x0,y0,x1,y1,5) --back
 	-- engine
 	rectfill(x0+2,y0+1,x1-2,y1-1,1) 
-	pset(x0+11-(0.05*abs(speed)*tick%9),y0+1,12)
-	pset(x0+11-(0.05*abs(speed)*tick%9),y0+2,12)
-	pset(x0+11+(0.05*abs(speed)*tick%9),y0+1,12)
-	pset(x0+11+(0.05*abs(speed)*tick%9),y0+2,12)
+	pulse_offset=0.09*abs(flr(speed))*tick%9
+	pset(x0+11-pulse_offset,y0+1,12)
+	pset(x0+11-pulse_offset,y0+2,12)
+	pset(x0+11+pulse_offset,y0+1,12)
+	pset(x0+11+pulse_offset,y0+2,12)
 end
 
 function draw_lasers()
@@ -173,6 +174,7 @@ function draw_lasers()
 end
 
 function fire()
+	msg=""
 	laser={
 		x=ship.x+ship.width/2,
 		y=ship.y+ship.height/2,
