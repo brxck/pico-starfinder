@@ -53,28 +53,28 @@ end
 function move_ship()
 	-- thrust
 	if (btn(0)) then
-		ship.dx=max(ship.dx-0.01,-3)
+		ship.dx=max(ship.dx-0.05,-3)
 	elseif (btn(1)) then
-		ship.dx=min(ship.dx+0.01,3)
+		ship.dx=min(ship.dx+0.05,3)
 	end
 
 	if (btn(2)) then
-		ship.dy=max(ship.dy-0.01,-3)
+		ship.dy=max(ship.dy-0.05,-3)
 	elseif (btn(3)) then
-		ship.dy=min(ship.dy+0.01,3)
+		ship.dy=min(ship.dy+0.05,3)
 	end
 
 	-- revert to zero
 	if (not btn(0) and ship.dx<0) then
-		ship.dx+=0.01
+		ship.dx+=0.02
 	elseif (not btn(1) and ship.dx>0) then 
-		ship.dx-=0.01
+		ship.dx-=0.02
 	end
 
 	if (not btn(2) and ship.dy<0) then
-		ship.dy+=0.01
+		ship.dy+=0.02
 	elseif (not btn(3) and ship.dy>0) then 
-		ship.dy-=0.01
+		ship.dy-=0.02
 	end
 
 	ship.x=mid(ship.x+ship.dx,-60,60-ship.width)
